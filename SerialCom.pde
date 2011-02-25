@@ -1,5 +1,5 @@
 /*
-  AeroQuad v2.2 - Feburary 2011
+  AeroQuad v2.3 - February 2011
   www.AeroQuad.com
   Copyright (c) 2011 Ted Carancho.  All rights reserved.
   An Open Source Arduino based multicopter.
@@ -83,7 +83,7 @@ void readSerialCommand() {
       accel.setSmoothFactor(readFloatSerial());
       timeConstant = readFloatSerial();
 #if defined(AeroQuad_v1) || defined(AeroQuad_v18)
-      _flightAngle->initialize();
+      //_flightAngle->initialize();
 #endif
       break;
     case 'M': // Receive transmitter smoothing values
@@ -234,10 +234,10 @@ void sendSerialTelemetry() {
     Serial.print(" rxAUX: ");
     Serial.print(receiver.getRaw(AUX));
     Serial.print(" ThottleA: ");
-    Serial.print(throttleAdjust);
-    Serial.print(" Throttle: ");
-    Serial.println(throttle);
-    */
+    Serial.print(throttleAdjust);*/
+    PrintValueComma((float)RAD_2_DEG(kinematics.getDriftCorrectedRate(ROLL)));
+    Serial.print(gyro.getFlightData(ROLL));
+    Serial.println();
     //printFreeMemory();
     //queryType = 'X';
     break;
@@ -313,18 +313,18 @@ void sendSerialTelemetry() {
     break;
   case 'Q': // Send sensor data
     for (byte axis = ROLL; axis < LASTAXIS; axis++) {
-      PrintValueComma(gyro.getData(axis));
+      PrintValueComma((float)RAD_2_DEG(kinematics.getDriftCorrectedRate(axis)));
     }
     for (byte axis = ROLL; axis < LASTAXIS; axis++) {
-      PrintValueComma(accel.getData(axis));
+      PrintValueComma(accel.getRaw(axis));
     }
     for (byte axis = ROLL; axis < YAW; axis++) {
       PrintValueComma(levelAdjust[axis]);
     }
-    PrintValueComma(_flightAngle->getData(ROLL));
-    PrintValueComma(_flightAngle->getData(PITCH));
+    PrintValueComma((float)RAD_2_DEG(kinematics.getAttitude(ROLL)));
+    PrintValueComma((float)RAD_2_DEG(kinematics.getAttitude(PITCH)));
     #if defined(HeadingMagHold) || defined(AeroQuadMega_CHR6DM) || defined(APM_OP_CHR6DM)
-      PrintValueComma(compass.getAbsoluteHeading());
+      PrintValueComma((float)(RAD_2_DEG(kinematics.getAttitude(YAW))));    // jihlein: remove float(RAD_2_DEG()) when configurator is updated to accept radians as input, displayed as degrees
     #else
       PrintValueComma(0);
     #endif
@@ -354,6 +354,7 @@ void sendSerialTelemetry() {
   case 'S': // Send all flight data
     PrintValueComma(deltaTime);
     for (byte axis = ROLL; axis < LASTAXIS; axis++) {
+      //PrintValueComma((float)(RAD_2_DEG(kinematics.getDriftCorrectedRate(axis))) * 2);
       PrintValueComma(gyro.getFlightData(axis));
     }
     #ifdef BattMonitor
@@ -368,7 +369,7 @@ void sendSerialTelemetry() {
       PrintValueComma(motors.getMotorCommand(motor));
     }
     for (byte axis = ROLL; axis < LASTAXIS; axis++) {
-      PrintValueComma(accel.getFlightData(axis));
+      PrintValueComma(accel.getRaw(axis));
     }
     Serial.print(armed, BIN);
     comma();
@@ -377,7 +378,7 @@ void sendSerialTelemetry() {
     if (flightMode == ACRO)
       PrintValueComma(1000);
     #ifdef HeadingMagHold
-      PrintValueComma(compass.getAbsoluteHeading());
+      PrintValueComma((float)(RAD_2_DEG(kinematics.getAttitude(YAW))));  // jihlein: remove float(RAD_2_DEG()) when configurator is updated to accept radians as input, displayed as degrees
     #else
       PrintValueComma(0);
     #endif
@@ -492,38 +493,22 @@ void sendSerialTelemetry() {
     break;
   case '`': // Send Camera values 
     #ifdef Camera
-    //Serial.print(camera.getMode());
-    //comma();
     PrintValueComma(camera.getMode());
-    //Serial.print(camera.getCenterPitch());
-    //comma();
     PrintValueComma(camera.getCenterPitch());
-    //Serial.print(camera.getCenterRoll());
-    //comma();
     PrintValueComma(camera.getCenterRoll());
-    //Serial.print(camera.getCenterYaw());
-    //comma();
     PrintValueComma(camera.getCenterYaw());
+
     Serial.print(camera.getmCameraPitch() , 2);
     comma();
     Serial.print(camera.getmCameraRoll() , 2);
     comma();
     Serial.print(camera.getmCameraYaw() , 2);
     comma();
-    //Serial.print(camera.getServoMinPitch());
-    //comma();
+
     PrintValueComma(camera.getServoMinPitch());
-    //Serial.print(camera.getServoMinRoll());
-    //comma();
     PrintValueComma(camera.getServoMinRoll());
-    //Serial.print(camera.getServoMinYaw());
-    //comma();
     PrintValueComma(camera.getServoMinYaw());
-    //Serial.print(camera.getServoMaxPitch());
-    //comma();
     PrintValueComma(camera.getServoMaxPitch());
-    //Serial.print(camera.getServoMaxRoll());
-    //comma();
     PrintValueComma(camera.getServoMaxRoll());
     Serial.println(camera.getServoMaxYaw());
     #endif

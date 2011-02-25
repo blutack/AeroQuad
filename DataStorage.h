@@ -1,5 +1,5 @@
 /*
-  AeroQuad v2.2 - Feburary 2011
+  AeroQuad v2.3 - February 2011
   www.AeroQuad.com
   Copyright (c) 2011 Ted Carancho.  All rights reserved.
   An Open Source Arduino based multicopter.
@@ -234,7 +234,6 @@ void writeEEPROM(void){
     writeFloat(receiver.getTransmitterOffset(channel), offset+4);
     writeFloat(receiver.getSmoothFactor(channel),      offset+8);
   }
-
 
   writeFloat(smoothHeading, HEADINGSMOOTH_ADR);
   writeFloat(aref, AREF_ADR);
