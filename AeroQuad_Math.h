@@ -367,3 +367,67 @@ int findMedian(int *data, int arraySize) {                  //Thanks ala42! Post
   
   return data[arraySize/2]; // return the median value
 }
+
+////////////////////////////////////////////////////////////////////////////////
+//
+//  Constant Definitions
+//
+//  General:
+//
+//    a = (2 * tau)/T
+//      tau = filter time constant
+//      T   = sample time
+//
+//  Lag Filter:
+//
+//    gx1 = 1/(1+a)
+//    gx2 = 1/(1+a)
+//    gx3 = (1-a)/(1+a)
+//
+//  Washout Filter:
+//
+//    gx1 = a/(1+a)
+//    gx2 = -a/(1+a)
+//    gx3 = (1-a)/(1+a)
+//
+////////////////////////////////////////////////////////////////////////////////
+
+struct firstOrderData
+{
+  float gx1;
+  float gx2;
+  float gx3;
+  float lastInput;
+  float lastOutput;
+} firstOrder[3];
+
+void setupFilters()  {
+  // ax 0.05 sec Lag Filter at 50 Hz
+  firstOrder[XAXIS].gx1 =  0.166666666666667;
+  firstOrder[XAXIS].gx2 =  0.166666666666667;
+  firstOrder[XAXIS].gx3 = -0.666666666666667;
+  firstOrder[XAXIS].lastInput =  0.0;
+  firstOrder[XAXIS].lastOutput = 0.0;
+  
+  // ay 0.05 sec Lag Filter at 50 Hz
+  firstOrder[YAXIS].gx1 =  0.166666666666667;
+  firstOrder[YAXIS].gx2 =  0.166666666666667;
+  firstOrder[YAXIS].gx3 = -0.666666666666667;
+  firstOrder[YAXIS].lastInput =  0.0;
+  firstOrder[YAXIS].lastOutput = 0.0;
+  
+  // az 0.05 sec Lag Filter at 50 Hz
+  firstOrder[ZAXIS].gx1 =  0.166666666666667;
+  firstOrder[ZAXIS].gx2 =  0.166666666666667;
+  firstOrder[ZAXIS].gx3 = -0.666666666666667;
+  firstOrder[ZAXIS].lastInput =  -1.0;
+  firstOrder[ZAXIS].lastOutput = -1.0;
+}
+
+float computeFirstOrder(float currentInput, struct firstOrderData *filterParameters) {
+  filterParameters->lastOutput = filterParameters->gx1 * currentInput + 
+                                 filterParameters->gx2 * filterParameters->lastInput - 
+                                 filterParameters->gx3 * filterParameters->lastOutput;
+  filterParameters->lastInput = currentInput;
+  return filterParameters->lastOutput;
+}
