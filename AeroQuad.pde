@@ -118,15 +118,10 @@
 
 #ifdef AeroQuad_v18
   Accel_AeroQuadMega_v2 accel;
-  //Gyro_AeroQuadMega_v2 gyro;
-  #include "RateGyro.h"
-  RateGyro_AeroQuadMega_v2 gyro;
+  Gyro_AeroQuadMega_v2 gyro;
   Receiver_AeroQuad receiver;
   Motors_PWMtimer motors;
   //Motors_AeroQuadI2C motors; // Use for I2C based ESC's
-  //#include "FlightAngle.h"
-  //FlightAngle_DCM tempFlightAngle;
-  //FlightAngle *_flightAngle = &tempFlightAngle;
   #include "Kinematics.h"
   Kinematics_DCM kinematics;
   #ifdef HeadingMagHold
@@ -169,12 +164,7 @@
   Motors_PWMtimer motors;
   //Motors_AeroQuadI2C motors; // Use for I2C based ESC's
   Accel_AeroQuadMega_v2 accel;
-  //Gyro_AeroQuadMega_v2 gyro;
-  #include "RateGyro.h"
-  RateGyro_AeroQuadMega_v2 gyro;
-  //#include "FlightAngle.h"
-  //FlightAngle_DCM tempFlightAngle;
-  //FlightAngle *_flightAngle = &tempFlightAngle;
+  Gyro_AeroQuadMega_v2 gyro;
   #include "Kinematics.h"
   Kinematics_DCM kinematics;
   #ifdef HeadingMagHold
@@ -197,16 +187,10 @@
 #endif
 
 #ifdef ArduCopter
-  //Gyro_ArduCopter gyro;
-  #include "RateGyro.h"
   Gyro_APM rateGyro;
-  //Accel_ArduCopter accel;
   Accel_APM accel;
   Receiver_ArduCopter receiver;
   Motors_ArduCopter motors;
-  //#include "FlightAngle.h"
-  //FlightAngle_DCM tempFlightAngle;
-  //FlightAngle *_flightAngle = &tempFlightAngle;
   #include "Kinematics.h"
   Kinematics_DCM kinematics;
   #ifdef HeadingMagHold
@@ -228,9 +212,6 @@
   Gyro_Wii gyro;
   Receiver_AeroQuad receiver;
   Motors_PWM motors;
-  //#include "FlightAngle.h"
-  //FlightAngle_DCM tempFlightAngle;
-  //FlightAngle *_flightAngle = &tempFlightAngle;
   #include "Kinematics.h"
   Kinematics_DCM kinematics; 
   #ifdef CameraControl
@@ -244,9 +225,6 @@
   Gyro_Wii gyro;
   Receiver_AeroQuadMega receiver;
   Motors_PWM motors;
-  //#include "FlightAngle.h"
-  //FlightAngle_DCM tempFlightAngle;
-  //FlightAngle *_flightAngle = &tempFlightAngle;
   #include "Kinematics.h"
   Kinematics_DCM kinematics; 
   #ifdef CameraControl

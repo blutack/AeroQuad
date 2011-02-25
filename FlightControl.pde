@@ -42,7 +42,8 @@ void processArdupirateSuperStableMode(void) // NOT FLIGHT TESTED
   else
     PID[LEVELROLL].integratedError = 0;
   const float stableRoll = PID[LEVELROLL].P * errorRoll + PID[LEVELROLL].I * PID[LEVELROLL].integratedError;
-  errorRoll = stableRoll - RAD_2_DEG(kinematics.getDriftCorrectedRate(ROLL));
+  //errorRoll = stableRoll - RAD_2_DEG(kinematics.getDriftCorrectedRate(ROLL));
+  errorRoll = stableRoll - gyro.getFlightData(ROLL);
   motors.setMotorAxisCommand(ROLL,constrain(PID[LEVELGYROROLL].P*errorRoll,-MAX_CONTROL_OUTPUT,MAX_CONTROL_OUTPUT));
 
   // PITCH
@@ -55,7 +56,8 @@ void processArdupirateSuperStableMode(void) // NOT FLIGHT TESTED
   else
     PID[LEVELPITCH].integratedError = 0;
   const float stablePitch = PID[LEVELPITCH].P * errorPitch + PID[LEVELPITCH].I * PID[LEVELPITCH].integratedError;
-  errorPitch = stablePitch - RAD_2_DEG(kinematics.getDriftCorrectedRate(PITCH));
+  //errorPitch = stablePitch - RAD_2_DEG(kinematics.getDriftCorrectedRate(PITCH));
+  errorPitch = stablePitch - gyro.getFlightData(PITCH);
   motors.setMotorAxisCommand(PITCH,constrain(PID[LEVELGYROPITCH].P*errorPitch,-MAX_CONTROL_OUTPUT,MAX_CONTROL_OUTPUT));
 }
 
