@@ -131,8 +131,9 @@ public:
     accelRaw[YAXIS] = accelZero[YAXIS] - ((Wire.receive()|(Wire.receive() << 8)) >> 2);
     accelRaw[ZAXIS] = accelZero[ZAXIS] - ((Wire.receive()|(Wire.receive() << 8)) >> 2);
 
-    for (byte axis = XAXIS; axis < LASTAXIS; axis++)
-      accelVector[axis] = filterSmooth(accelRaw[axis] * accelScaleFactor, accelVector[axis], smoothFactor);
+    for (byte axis = XAXIS; axis < LASTAXIS; axis++) {
+      //accelVector[axis] = filterSmooth(accelRaw[axis] * accelScaleFactor, accelVector[axis], smoothFactor);
+      accelVector[axis] = computerFirstOrder(accelRaw[axis] * accelScaleFactor, &firstOrder[axis]); // updated filter for accels
   }
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -400,6 +400,7 @@ void setup() {
   //_flightAngle->initialize(); // defined in FlightAngle.h
 
   // Optional Sensors
+  setupFilters(); // defined in AeroQuad_Math.h, used for filtering accels in kinematics object
   #ifdef HeadingMagHold
     compass.initialize();
     kinematics.initialize(compass.getHdgXY(XAXIS), compass.getHdgXY(YAXIS));
