@@ -54,10 +54,13 @@ public:
 
 class Gyro_AeroQuadMega_v2 : public Gyro {
 private:
+  int address;
   
 public:
   Gyro_AeroQuadMega_v2() : Gyro() {
     gyroScaleFactor = DEG_2_RAD(1.0 / 14.375);  //  ITG3200 14.375 LSBs per °/sec
+    //address = 0xD0;
+    address = 0x69;
   }
   
 ////////////////////////////////////////////////////////////////////////////////
@@ -65,9 +68,9 @@ public:
 ////////////////////////////////////////////////////////////////////////////////
 
   void initialize(void) {
-    updateRegisterI2C(0x69, 0x3E, 0x80); // send a reset to the device
-    updateRegisterI2C(0x69, 0x16, 0x1D); // 10Hz low pass filter
-    updateRegisterI2C(0x69, 0x3E, 0x01); // use internal oscillator 
+    updateRegisterI2C(address, 0x3E, 0x80); // send a reset to the device
+    updateRegisterI2C(address, 0x16, 0x1D); // 10Hz low pass filter
+    updateRegisterI2C(address, 0x3E, 0x01); // use internal oscillator 
   }
   
 ////////////////////////////////////////////////////////////////////////////////
@@ -75,8 +78,8 @@ public:
 ////////////////////////////////////////////////////////////////////////////////
 
   void measure(void) {
-    sendByteI2C(0x69, 0x1D);
-    Wire.requestFrom(0x69, 6);
+    sendByteI2C(address, 0x1D);
+    Wire.requestFrom(address, 6);
     
     // The following 3 lines read the gyro and assign it's data to gyroRaw
     // in the correct order and phase to suit the standard shield installation
@@ -107,8 +110,8 @@ public:
     
     for (byte calAxis = ROLL; calAxis < LASTAXIS; calAxis++) {
       for (int i=0; i<FINDZERO; i++) {
-        sendByteI2C(0x69, (calAxis * 2) + 0x1D);
-        findZero[i] = readWordI2C(0x69);
+        sendByteI2C(address, (calAxis * 2) + 0x1D);
+        findZero[i] = readWordI2C(address);
         delay(10);
       }
       gyroZero[calAxis] = findMedian(findZero, FINDZERO);

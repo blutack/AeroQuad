@@ -132,9 +132,11 @@ public:
     accelRaw[ZAXIS] = accelZero[ZAXIS] - ((Wire.receive()|(Wire.receive() << 8)) >> 2);
 
     for (byte axis = XAXIS; axis < LASTAXIS; axis++) {
-      //accelVector[axis] = filterSmooth(accelRaw[axis] * accelScaleFactor, accelVector[axis], smoothFactor);
-      accelVector[axis] = computerFirstOrder(accelRaw[axis] * accelScaleFactor, &firstOrder[axis]); // updated filter for accels
+      accelVector[axis] = filterSmooth(accelRaw[axis] * accelScaleFactor, accelVector[axis], smoothFactor);
+      //accelVector[axis] = computeFirstOrder(accelRaw[axis] * accelScaleFactor, &firstOrder[axis]); // updated filter for accels
+      }
   }
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // Calibrate AeroQuad v2.0 Accelerometer

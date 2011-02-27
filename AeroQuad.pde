@@ -80,7 +80,7 @@
 #include "AeroQuad.h"
 #include "I2C.h"
 #include "PID.h"
-#include "AQMath.h"
+#include "AeroQuad_Math.h"
 #include "Receiver.h"
 #include "DataAcquisition.h"
 #include "Accel.h"
@@ -304,9 +304,6 @@
   FlightAngle_DCM tempFlightAngle;
   FlightAngle *_flightAngle = &tempFlightAngle;
 #endif
-
-
-
 
 #ifdef XConfig
   void (*processFlightControl)() = &processFlightControlXMode;
